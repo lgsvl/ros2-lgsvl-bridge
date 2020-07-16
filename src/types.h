@@ -12,7 +12,7 @@
 #include <mutex>
 #include <unordered_map>
 
-#include <rosidl_generator_c/message_type_support_struct.h>
+#include <rosidl_runtime_c/message_type_support_struct.h>
 
 struct MessageType
 {
@@ -36,7 +36,7 @@ public:
 private:
     typedef std::unordered_map<std::string, void*> Libraries;
     typedef std::unordered_map<std::string, MessageType> Messages;
-    
+
     Libraries libraries;
     Messages messages;
 

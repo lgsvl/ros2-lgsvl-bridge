@@ -10,8 +10,10 @@
 
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
 
-  <exec_depend>rcutils</exec_depend>
-  <exec_depend>rcl</exec_depend>
+  <depend>rcutils</depend>
+  <depend>rcl</depend>
+  <depend>boost</depend>
+  <depend>ament_cmake_ros</depend>
 
   <export><build_type>ament_cmake</build_type></export>
 </package>

@@ -2,7 +2,7 @@
 Changelog for package lgsvl_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2020-08-12)
+------------------
 * Initial commit
 * Contributors: Martins Mozeiko

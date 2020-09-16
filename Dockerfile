@@ -1,12 +1,10 @@
 # Example build command:
-# export DOCKER_BUILDKIT=1
 # export FROM_IMAGE="ros:foxy"
 # export OVERLAY_MIXINS="release ccache"
 # docker build -t lgsvl/ros2-lgsvl-bridge:foxy \
 #   --build-arg FROM_IMAGE \
 #   --build-arg OVERLAY_MIXINS \
 #   -f Dockerfile ./
-
 ARG FROM_IMAGE=ros:foxy
 ARG OVERLAY_WS=/opt/overlay_ws
 
@@ -55,7 +53,7 @@ RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
       --mixin $OVERLAY_MIXINS \
       --symlink-install
 
-# source overlay from entrypoint
+# source overlay entrypoint
 ENV OVERLAY_WS $OVERLAY_WS
 RUN sed --in-place \
       's|^source .*|source "$OVERLAY_WS/install/setup.bash"|' \

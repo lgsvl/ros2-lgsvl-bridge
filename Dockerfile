@@ -26,45 +26,14 @@ RUN mkdir -p /tmp/opt && \
     find ./ -name "COLCON_IGNORE" | \
       xargs cp --parents -t /tmp/opt || true
 
-# multi-stage for unzipping
-FROM $FROM_IMAGE AS unzipper
-ARG DEBIAN_FRONTEND=noninteractive
-
-# install helper dependencies
-RUN apt-get update && apt-get install -q -y \
-        wget \
-        unzip \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /tmp/lgsvl
-ARG LGSVL_VERSION=2020.06
-RUN wget -q -O lgsvlsimulator.zip \
-        "https://github.com/lgsvl/simulator/releases/download/${LGSVL_VERSION}/lgsvlsimulator-linux64-${LGSVL_VERSION}.zip" && \
-    unzip lgsvlsimulator.zip && \
-    mv "lgsvlsimulator-linux64-${LGSVL_VERSION}" \
-        simulator && \
-    rm lgsvlsimulator.zip
-
 # multi-stage for building
 FROM $FROM_IMAGE AS builder
 ARG DEBIAN_FRONTEND=noninteractive
 
-# install lgsvl dependencies
+# install CI dependencies
 RUN apt-get update && apt-get install -q -y \
-        ca-certificates \
         ccache \
-        jq \
         lcov \
-        libgl1 \
-        libgtk2.0-0 \
-        libvulkan1 \
-        libx11-6 \
-        libxau6 \
-        libxcb1 \
-        libxdmcp6 \
-        libxext6 \
-        unzip \
-        wget \
     && rm -rf /var/lib/apt/lists/* \
     && rosdep update
 
@@ -85,12 +54,6 @@ RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     colcon build \
       --mixin $OVERLAY_MIXINS \
       --symlink-install
-
-# install lgsvl simulator
-COPY --from=unzipper /tmp/lgsvl/simulator /opt/lgsvl/simulator
-ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES graphics,display
-ADD "https://gitlab.com/nvidia/container-images/vulkan/raw/master/nvidia_icd.json" /etc/vulkan/icd.d/nvidia_icd.json
 
 # source overlay from entrypoint
 ENV OVERLAY_WS $OVERLAY_WS

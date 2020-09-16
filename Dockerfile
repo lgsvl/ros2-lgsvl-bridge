@@ -1,9 +1,3 @@
-# syntax=docker/dockerfile:experimental
-
-# Use experimental buildkit for faster builds
-# https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md
-# Use `--progress=plain` to use plane stdout for docker build
-#
 # Example build command:
 # export DOCKER_BUILDKIT=1
 # export FROM_IMAGE="ros:foxy"
@@ -39,7 +33,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 # install helper dependencies
 RUN apt-get update && apt-get install -q -y \
         wget \
-        unzip
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp/lgsvl
 ARG LGSVL_VERSION=2020.06
@@ -54,15 +49,8 @@ RUN wget -q -O lgsvlsimulator.zip \
 FROM $FROM_IMAGE AS builder
 ARG DEBIAN_FRONTEND=noninteractive
 
-# edit apt for caching
-RUN cp /etc/apt/apt.conf.d/docker-clean /etc/apt/ && \
-    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' \
-      > /etc/apt/apt.conf.d/docker-clean
-
 # install lgsvl dependencies
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
-    apt-get update && apt-get install -q -y \
+RUN apt-get update && apt-get install -q -y \
         ca-certificates \
         ccache \
         jq \
@@ -77,15 +65,14 @@ RUN --mount=type=cache,target=/var/cache/apt \
         libxext6 \
         unzip \
         wget \
+    && rm -rf /var/lib/apt/lists/* \
     && rosdep update
 
 # install overlay dependencies
 ARG OVERLAY_WS
 WORKDIR $OVERLAY_WS
 COPY --from=cacher /tmp/$OVERLAY_WS/src ./src
-RUN --mount=type=cache,target=/var/cache/apt \
-    --mount=type=cache,target=/var/lib/apt \
-    . /opt/ros/$ROS_DISTRO/setup.sh && \
+RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     apt-get update && rosdep install -q -y \
       --from-paths src \
       --ignore-src \
@@ -94,8 +81,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
 # build overlay source
 COPY --from=cacher $OVERLAY_WS/src ./src
 ARG OVERLAY_MIXINS="release ccache"
-RUN --mount=type=cache,target=/root/.ccache \
-    . /opt/ros/$ROS_DISTRO/setup.sh && \
+RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     colcon build \
       --mixin $OVERLAY_MIXINS \
       --symlink-install
@@ -105,10 +91,6 @@ COPY --from=unzipper /tmp/lgsvl/simulator /opt/lgsvl/simulator
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES graphics,display
 ADD "https://gitlab.com/nvidia/container-images/vulkan/raw/master/nvidia_icd.json" /etc/vulkan/icd.d/nvidia_icd.json
-
-# restore apt for docker
-RUN mv /etc/apt/docker-clean /etc/apt/apt.conf.d/ && \
-    rm -rf /var/lib/apt/lists/
 
 # source overlay from entrypoint
 ENV OVERLAY_WS $OVERLAY_WS

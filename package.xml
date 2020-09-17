@@ -15,5 +15,10 @@
   <depend>boost</depend>
   <depend>ament_cmake_ros</depend>
 
+  <exec_depend>lgsvl_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>rosgraph_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+
   <export><build_type>ament_cmake</build_type></export>
 </package>

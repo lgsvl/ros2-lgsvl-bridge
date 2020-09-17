@@ -94,7 +94,7 @@ const MessageType* MessageTypes::get(const std::string& type)
 
     // generator
     // {
-    void* generator = load_lib(package + "__rosidl_runtime_c");
+    void* generator = load_lib(package + "__rosidl_generator_c");
     if (!generator)
     {
         return NULL;

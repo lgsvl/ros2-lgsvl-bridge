@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>lgsvl_bridge</name>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
   <description>LGSVL Simulator Bridge</description>
   <maintainer email="martins.mozeiko@lge.com">Martins Mozeiko</maintainer>
   <maintainer email="hadi.tabatabaee@lge.com">Hadi Tabatabaee</maintainer>

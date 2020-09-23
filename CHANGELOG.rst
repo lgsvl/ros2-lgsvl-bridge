@@ -2,8 +2,8 @@
 Changelog for package lgsvl_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.3 (2020-09-23)
+------------------
 * Load correct libraries in foxy
 * Contributors: Hadi Tabatabaee
 

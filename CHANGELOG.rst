@@ -2,8 +2,8 @@
 Changelog for package lgsvl_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.2.0 (2020-10-13)
+------------------
 * Include exec depends for needed message types
   Published by lgsvl simulator
 * Contributors: Ruffin

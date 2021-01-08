@@ -223,7 +223,7 @@ static_assert(sizeof(bool) == 1);
     {                                                                                                                 \
         size_t byte_count = count * sizeof(type);                                                                     \
         UNS_CHECK_SIZE(byte_count);                                                                                   \
-        if (member->array_size_ == 0)                                                                                 \
+        if (member->array_size_ == 0 || member->is_upper_bound_)                                                                                 \
         {                                                                                                             \
             auto arr = (rosidl_generator_c__##idtype##__Sequence*)ptr;                                                \
             if (!rosidl_generator_c__##idtype##__Sequence__init(arr, count))                                          \
@@ -268,15 +268,7 @@ struct Reader
             {
                 uint32_t count;
                 UNS_SIMPLE(uint32_t, &count);
-                if (member->array_size_ != 0)
-                {
-                    // constant size array
-                    if (count != 0 && count != member->array_size_)
-                    {
-                        ERROR("Incorrect array " << member->name_ << " element count, expected = " << member->array_size_ << ", got = " << count);
-                        return false;
-                    }
-                }
+                // count != member->array_size_ for the case of upper-bounded sequences
 
                 switch (member->type_id_)
                 {
@@ -321,7 +313,7 @@ struct Reader
                 case rosidl_typesupport_introspection_c__ROS_TYPE_MESSAGE:
                 {
                     void* arr;
-                    if (member->array_size_ == 0)
+                    if (member->array_size_ == 0 || member->is_upper_bound_)
                     {
                         // dynamic size array
                         assert(member->resize_function);

@@ -2,6 +2,11 @@
 Changelog for package lgsvl_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Add support for upper-bounded sequences
+* Contributors: Christopher Ho
+
 0.2.0 (2020-10-13)
 ------------------
 * Include exec depends for needed message types

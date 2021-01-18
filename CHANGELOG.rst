@@ -2,8 +2,8 @@
 Changelog for package lgsvl_bridge
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.0 (2021-01-18)
+------------------
 * Add support for upper-bounded sequences
 * Contributors: Christopher Ho
 

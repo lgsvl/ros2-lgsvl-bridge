@@ -14,6 +14,7 @@ find_package(rcl REQUIRED)
 ament_auto_find_build_dependencies()
 
 include_directories(${Boost_INCLUDE_DIRS})
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 add_executable(lgsvl_bridge
   src/bridge.cc
